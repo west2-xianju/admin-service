@@ -35,4 +35,13 @@ def fill_db():
 
 
 if __name__ == '__main__':
+    
+    from app.api.auth.models import AdminUser
+    from app.api.users.models import User
+    # from utils.db_generator import FakeGenerator
+    # with app.app_context():
+    #     db.drop_all()
+    #     db.create_all()
+    #     FakeGenerator().start()
+    
     Flask.run(app ,debug=True)

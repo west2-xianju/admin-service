@@ -56,7 +56,7 @@ def add_user():
     if User.query.filter_by(email=data['email']).first():
         return BaseResponse(code=400, message='email already exists').dict()
     
-    new_user = User().from_dict(data).save()
+    new_user = User().from_dict(data)
     
     return BaseResponse(data=new_user.to_dict()).dict()
 

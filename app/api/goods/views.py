@@ -112,6 +112,6 @@ def add_good():
     if request.content_type != 'application/json':
         return BaseResponse(code=400, message='content type must be application/json').dict()
 
-    result = Good().from_dict(json.loads(request.data)).save()
+    result = Good().from_dict(json.loads(request.data))
 
     return BaseResponse(data=result.to_dict()).dict()

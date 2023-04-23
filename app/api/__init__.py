@@ -16,3 +16,6 @@ api.register_blueprint(users_blueprint, url_prefix='/users')
 
 from .goods import goods as goods_blueprint
 api.register_blueprint(goods_blueprint, url_prefix='/goods')
+
+from .admin import admin as admin_blueprint
+api.register_blueprint(admin_blueprint, url_prefix='/admin')

@@ -20,7 +20,7 @@ def get_goods_list():
         filter_condition.add(Good.good_id == request.args.get('good_id'))
          
     if request.args.get('sell_id'):
-        filter_condition.add(Good.sell_id == request.args.get('sell_id'))
+        filter_condition.add(Good.seller_id == request.args.get('sell_id'))
      
     order = request.args.get('order_by')
     order_map = ['dec', 'asc']

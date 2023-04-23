@@ -60,7 +60,7 @@ def check_password_hash(plain_password, hashed_password):
 
 
 GOOD_STATES_ENUM = ['']
-class Good(db.Model, BaseModel):
+class User(db.Model, BaseModel):
     __bind_key__ = 'app'
     __tablename__ = 'user'
     

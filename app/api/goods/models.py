@@ -32,13 +32,13 @@ class BaseModel:
     def from_dict(cls, model_dict):
         return cls(**model_dict).save()
 
-GOOD_STATES_ENUM = ['pending', 'released', 'locked', 'sold', 'reported', 'canceled', 'deleted']
 class Good(db.Model, BaseModel):
     __bind_key__ = 'app'
     __tablename__ = 'good'
     
+    GOOD_STATES_ENUM = ['pending', 'released', 'locked', 'sold', 'reported', 'canceled', 'deleted']
     good_id = Column('uid', Integer, primary_key=True)
-    sell_id = Column(Integer, nullable=False)
+    seller_id = Column(Integer, nullable=False)
     state = Column(Enum(*GOOD_STATES_ENUM), nullable=False, default=GOOD_STATES_ENUM[0])
     game = Column(String(100))
     title = Column(String(40))
@@ -52,7 +52,7 @@ class Good(db.Model, BaseModel):
     def to_dict(self):
         return {
             'uid': self.good_id,
-            'sell_id': self.sell_id,
+            'sell_id': self.seller_id,
             'state': self.state,
             'game': self.game,
             'title': self.title,

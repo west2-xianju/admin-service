@@ -5,8 +5,9 @@ from hashlib import md5
 import forgery_py
 import logging
 from app import db
-from app.api.users.models import Good
-
+from app.api.auth.models import AdminUser
+from app.api.users.models import User
+from app.api.goods.models import Good
 
 class FakeGenerator:
     def __init__(self):
@@ -19,7 +20,7 @@ class FakeGenerator:
     
     def generate_fake_app_data(self, count):
         for _ in range(count):
-            Good().from_dict({
+            User().from_dict({
                 'username': forgery_py.internet.user_name(True),
                 'nickname': forgery_py.name.full_name(),
                 'password': '123456',
@@ -29,6 +30,17 @@ class FakeGenerator:
                 'register_time': self.generate_fake_date(),
                     }).save()
             
+            Good().from_dict({
+                'seller_id': random.randint(1, count),
+                'state': random.choice(Good.GOOD_STATES_ENUM),
+                'game': forgery_py.forgery.address.city(),
+                'title': forgery_py.forgery.lorem_ipsum.title(),
+                'detail': forgery_py.forgery.lorem_ipsum.sentences(),
+                'price': random.randint(1, 100),
+                'publish_time': self.generate_fake_date(),
+            }).save()
+            
+        logging.info('Generated {} fake goods'.format(count))
         logging.info('Generated {} fake users'.format(count))
 
     def start(self, count=10):

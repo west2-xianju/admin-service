@@ -5,7 +5,7 @@ from hashlib import md5
 import forgery_py
 import logging
 from app import db
-from app.api.users.models import User
+from app.api.users.models import Good
 
 
 class FakeGenerator:
@@ -19,7 +19,7 @@ class FakeGenerator:
     
     def generate_fake_app_data(self, count):
         for _ in range(count):
-            User().from_dict({
+            Good().from_dict({
                 'username': forgery_py.internet.user_name(True),
                 'nickname': forgery_py.name.full_name(),
                 'password': '123456',

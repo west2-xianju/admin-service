@@ -59,8 +59,8 @@ def check_password_hash(plain_password, hashed_password):
     return hash_and_salt_password(plain_password) == hashed_password
 
 
-USER_STATES_ENUM = ['']
-class User(db.Model, BaseModel):
+GOOD_STATES_ENUM = ['']
+class Good(db.Model, BaseModel):
     __bind_key__ = 'app'
     __tablename__ = 'user'
     

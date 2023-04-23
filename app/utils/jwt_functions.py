@@ -3,7 +3,7 @@ from app import Config
 from datetime import datetime, timedelta
 
 def expiry_date():
-	return datetime.utcnow() + timedelta(seconds=Config.JWT_EXPIRY)
+    return datetime.utcnow() + timedelta(seconds=Config.JWT_EXPIRY)
 
 def generate_jwt(payload, expiry=expiry_date(), secret=None):
     _payload = {

@@ -36,7 +36,7 @@ class Wallet(db.Model, BaseModel):
     
     WALLET_STATES_ENUM = ['normal', 'locked']
     wallet_id = Column('uid', Integer, primary_key=True)
-    user_id = Column(Integer, nullable=False)
+    user_id = Column(Integer, nullable=False, unique=True)
     balance = Column(DECIMAL(10, 2))
     state = Column(Enum(*WALLET_STATES_ENUM), nullable=False, default=WALLET_STATES_ENUM[0])
 

@@ -8,6 +8,7 @@ from app import db
 from app.api.auth.models import AdminUser
 from app.api.users.models import User
 from app.api.goods.models import Good
+from app.api.wallets.models import Wallet
 
 class FakeGenerator:
     def __init__(self):
@@ -47,6 +48,12 @@ class FakeGenerator:
                 'detail': forgery_py.forgery.lorem_ipsum.sentences(),
                 'price': random.randint(1, 100),
                 'publish_time': self.generate_fake_date(),
+            })
+            
+            Wallet().from_dict({
+                'user_id': random.randint(1, count),
+                'balance': random.randint(1, 1000),
+                'state': random.choice(Wallet.WALLET_STATES_ENUM),
             })
             
         logging.info('Generated {} fake goods'.format(count))

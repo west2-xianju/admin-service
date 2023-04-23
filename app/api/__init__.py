@@ -17,5 +17,8 @@ api.register_blueprint(users_blueprint, url_prefix='/users')
 from .goods import goods as goods_blueprint
 api.register_blueprint(goods_blueprint, url_prefix='/goods')
 
-from .admin import admin as admin_blueprint
-api.register_blueprint(admin_blueprint, url_prefix='/admin')
+from .admins import admins as admins_blueprint
+api.register_blueprint(admins_blueprint, url_prefix='/admins')
+
+from .wallets import wallets as wallets_blueprint
+api.register_blueprint(wallets_blueprint, url_prefix='/wallets')

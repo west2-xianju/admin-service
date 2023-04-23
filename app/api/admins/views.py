@@ -1,5 +1,5 @@
 from flask import request
-from . import admin
+from . import admins
 from ..auth.models import AdminUser
 from sqlalchemy import and_
 from sqlalchemy.sql import text
@@ -8,7 +8,7 @@ from ...models import BaseResponse
 from flask_jwt_extended import jwt_required
 import json
 
-@admin.route('/', methods=['GET'])
+@admins.route('/', methods=['GET'])
 @jwt_required()
 def get_admin_list():
     
@@ -17,7 +17,7 @@ def get_admin_list():
     return BaseResponse(data={'admins': [i.to_dict() for i in admin_list]}).dict()
 
 
-@admin.route('/<int:admin_id>', methods=['GET'])
+@admins.route('/<int:admin_id>', methods=['GET'])
 @jwt_required()
 def get_admin_info(admin_id):
     if not AdminUser.query.filter_by(admin_id=admin_id).first():
@@ -28,7 +28,7 @@ def get_admin_info(admin_id):
     return BaseResponse(data=admin_info.to_dict()).dict()
 
 
-@admin.route('/', methods=['POST'])
+@admins.route('/', methods=['POST'])
 @jwt_required()
 def create_admin():
     if request.content_type != 'application/json':
@@ -45,7 +45,7 @@ def create_admin():
     
     return BaseResponse(data=result.to_dict()).dict()
 
-@admin.route("/<int:admin_id>", methods=["PUT"])
+@admins.route("/<int:admin_id>", methods=["PUT"])
 @jwt_required()
 def modify_admin(admin_id):
     if request.content_type != 'application/json':

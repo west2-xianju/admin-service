@@ -52,7 +52,7 @@ class Good(db.Model, BaseModel):
     def to_dict(self):
         return {
             'uid': self.good_id,
-            'sell_id': self.seller_id,
+            'seller_id': self.seller_id,
             'state': self.state,
             'game': self.game,
             'title': self.title,

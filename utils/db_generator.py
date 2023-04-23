@@ -9,6 +9,7 @@ from app.api.auth.models import AdminUser
 from app.api.users.models import User
 from app.api.goods.models import Good
 from app.api.wallets.models import Wallet
+from app.api.issues.models import Issue
 
 class FakeGenerator:
     def __init__(self):
@@ -56,8 +57,22 @@ class FakeGenerator:
                 'state': random.choice(Wallet.WALLET_STATES_ENUM),
             })
             
+            Issue().from_dict({
+                'seller_id': random.randint(1, count),
+                'buyer_id': random.randint(1, count),
+                'accuser_id': random.randint(1, count),
+                'reason': forgery_py.lorem_ipsum.sentence(),
+                'order_id': random.randint(1, count),
+                'judge_result': random.choice(Issue.JUDGE_RESULT_ENUM),
+                'judge_reason': forgery_py.lorem_ipsum.sentence(),
+                'judge_time': self.generate_fake_date(),
+                'state': random.choice(Issue.ISSUE_STATE_ENUM),
+                'judger_id': random.randint(1, count),
+            })
+            
         logging.info('Generated {} fake goods'.format(count))
         logging.info('Generated {} fake users'.format(count))
+        logging.info('Generated {} fake issues'.format(count))
 
     def start(self, count=10):
         self.generate_fake_app_data(count)

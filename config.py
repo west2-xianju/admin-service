@@ -2,6 +2,7 @@ import os
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 BASEDB = os.environ.get("DATABASE_BASE_URI")
+APPBASEDB = os.environ.get("APP_DATABASE_BASE_URI")
 
 
 def create_admin_sqlalchemy_uri(db_name):
@@ -10,7 +11,7 @@ def create_admin_sqlalchemy_uri(db_name):
 
 
 def create_app_sqlalchemy_uri(db_name):
-    return BASEDB + db_name
+    return APPBASEDB + db_name
 
 
 class Config:

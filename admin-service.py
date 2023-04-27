@@ -44,4 +44,4 @@ if __name__ == '__main__':
     #     db.create_all()
     #     FakeGenerator().start()
     
-    Flask.run(app ,debug=True)
+    Flask.run(app, host='0.0.0.0', port=3000)

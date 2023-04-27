@@ -28,3 +28,6 @@ api.register_blueprint(issues_blueprint, url_prefix='/issues')
 
 from .orders import orders as orders_blueprint
 api.register_blueprint(orders_blueprint, url_prefix='/orders')
+
+
+from . import views, models

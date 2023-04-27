@@ -25,3 +25,6 @@ api.register_blueprint(wallets_blueprint, url_prefix='/wallets')
 
 from .issues import issues as issues_blueprint
 api.register_blueprint(issues_blueprint, url_prefix='/issues')
+
+from .orders import orders as orders_blueprint
+api.register_blueprint(orders_blueprint, url_prefix='/orders')

@@ -10,6 +10,7 @@ from app.api.users.models import User
 from app.api.goods.models import Good
 from app.api.wallets.models import Wallet
 from app.api.issues.models import Issue
+from app.api.orders.models import Order
 
 class FakeGenerator:
     def __init__(self):
@@ -70,9 +71,21 @@ class FakeGenerator:
                 'judger_id': random.randint(1, count),
             })
             
+            Order().from_dict({
+                'order_id': random.randint(1, count),
+                'from_id': random.randint(1, count),
+                'to_id': random.randint(1, count),
+                'good_id': random.randint(1, count),
+                'price': random.randint(1, 100),
+                'state': random.choice(Order.ORDER_STATE_ENUM),
+                'create_time': self.generate_fake_date(),
+                'pay_time': self.generate_fake_date(),
+            })
+            
         logging.info('Generated {} fake goods'.format(count))
         logging.info('Generated {} fake users'.format(count))
         logging.info('Generated {} fake issues'.format(count))
+        logging.info('Generated {} fake orders'.format(count))
 
     def start(self, count=10):
         self.generate_fake_app_data(count)

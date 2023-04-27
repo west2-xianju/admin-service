@@ -88,5 +88,11 @@ class FakeGenerator:
         logging.info('Generated {} fake orders'.format(count))
 
     def start(self, count=10):
+        AdminUser().from_dict({
+            'username': 'superuser',
+            'password': 'root',
+            'level': AdminUser.ADMINUSER_LEVEL_ENUM[0],
+        })
+        
         self.generate_fake_app_data(count)
         self.generate_fake_admin_data(count)

@@ -17,6 +17,10 @@ def get_user_info(user_id):
         return BaseResponse(code=404, message='user not found').dict()
     return BaseResponse(data=user_info.to_dict()).dict()
 
+@users.route('/hi', methods=['GET'])
+def hi():
+    return BaseResponse(message='hi', data={'hello': 'from flask'}).dict()
+
 
 @users.route('/', methods=['GET'])
 @jwt_required()

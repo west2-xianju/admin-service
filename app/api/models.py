@@ -1,49 +1,32 @@
-from pydantic import BaseModel
+class RouteMeta():
+    title: str
+    # icon: str | None = None
+    # expended: bool | None = None
+    # orderNo: int | None = None
+    # hidden: bool | None = None
+    # hiddenBreadcrumb: bool | None = None
+    # single: bool | None = None
+    # keepAlive: bool | None = None
+    # frameSrc: str | None = None
+    # frameBlank: bool | None = None
 
-# import { defineComponent } from 'vue';
-
-# export interface MenuListResult {
-#   list: Array<RouteItem>;
-# }
-
-# export type Component<T = any> =
-#   | ReturnType<typeof defineComponent>
-#   | (() => Promise<typeof import('*.vue')>)
-#   | (() => Promise<T>);
-
-# export interface RouteItem {
-#   path: string;
-#   name: string;
-#   component?: Component | string;
-#   components?: Component;
-#   redirect?: string;
-#   meta: RouteMeta;
-#   children?: Array<RouteItem>;
-# }
-# export interface RouteMeta {
-#   title: string;
-#   icon?: string;
-#   expanded?: boolean;
-#   orderNo?: number;
-#   hidden?: boolean;
-#   hiddenBreadcrumb?: boolean;
-#   single?: boolean;
-#   keepAlive?: boolean;
-#   frameSrc?: string;
-#   frameBlank?: boolean;
-# }
+    
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
 
-# class RouteItem(BaseModel):
-#     title: str
-#     icon: str | None = None
-#   expanded: bool
-#   orderNo: int
-#   hidden: boolean
-#   hiddenBreadcrumb: boolean
-#   single?: boolean;
-#   keepAlive?: boolean;
-#   frameSrc?: string;
-#   frameBlank?: boolean;
-#     pass
 
+            
+class RouteItem():
+    path: str
+    name: str
+    # component: str | None = None
+    # components: str | None = None
+    # redirect: str | None = None
+    # meta: RouteMeta
+    # children: list | None = None
+
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)

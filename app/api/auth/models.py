@@ -51,6 +51,7 @@ def hash_and_salt_password(plain_password):
     return md5((plain_password + salt).encode('utf-8')).hexdigest()
 
 def check_password_hash(plain_password, hashed_password):
+    # print(plain_password, hashed_password)
     return hash_and_salt_password(plain_password) == hashed_password
 
     
@@ -81,7 +82,7 @@ class AdminUser(db.Model, BaseModel):
     password = synonym("_password", descriptor=password)
     
     def verify_password(self, password):
-        return check_password_hash(self._password, password)
+        return check_password_hash(password, self._password)
 
 
     def __init__(self, **kwargs):

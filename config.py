@@ -20,7 +20,7 @@ class Config:
     SQLALCHEMY_RECORD_QUERIES = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET = 'testing'
-    JWT_EXPIRY = 3600
+    JWT_EXPIRY = 36000
 
     @staticmethod
     def init_app(app):

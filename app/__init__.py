@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from config import config, Config
+from flask_cors import CORS
 
 db = SQLAlchemy()
 
@@ -28,5 +29,7 @@ def create_app(config_name):
     
     # from .api.users import users as users_blueprint
     # app.register_blueprint(users_blueprint, url_prefix='/users')
+    
+    CORS(app, origins='*', supports_credentials=True)
     
     return app

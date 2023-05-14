@@ -59,7 +59,6 @@ def check_password_hash(plain_password, hashed_password):
     return hash_and_salt_password(plain_password) == hashed_password
 
 
-GOOD_STATES_ENUM = ['']
 class User(db.Model, BaseModel):
     __bind_key__ = 'app'
     __tablename__ = 'user'
@@ -68,7 +67,7 @@ class User(db.Model, BaseModel):
     _username = Column("username", db.String(64), unique=True)
     _email = Column("email", db.String(64), unique=True)
     _password = Column('password', String(256))
-    nickname = Column(String(20))
+    nickname = Column(String(40))
     realname = Column(String(40))
     id_number = Column(String(20))
     register_time = Column(DateTime, nullable=False, default=datetime.utcnow)

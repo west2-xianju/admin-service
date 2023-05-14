@@ -3,8 +3,8 @@ from . import auth
 from .models import AdminUser
 from app.models import BaseResponse
 
-from app.utils import jwt_functions
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, get_jwt_identity
+from flask_jwt_extended import jwt_required
 
 
 @auth.route('/', methods=['POST'])
@@ -29,3 +29,13 @@ def admin_login():
     
     return BaseResponse(data={'token': token, 'token_type': 'Bearer'}).dict()
 
+
+@auth.route('/', methods=['GET'])
+@jwt_required()
+def get_admin_user_role():
+    username = get_jwt_identity()
+    user_info = AdminUser.query.filter_by(username=username).first()
+    
+    if not user_info:
+        return BaseResponse(code=404, message='user not found').dict()
+    return BaseResponse(data={'role': user_info.level, 'username': user_info.username}).dict()

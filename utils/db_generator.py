@@ -40,6 +40,7 @@ class FakeGenerator:
                 'realname': forgery_py.name.full_name(),
                 'id_number': forgery_py.forgery.address.phone(),
                 'register_time': self.generate_fake_date(),
+                'blocked': random.choice([True, False]),
                     })
             
             Good().from_dict({

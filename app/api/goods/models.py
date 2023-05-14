@@ -36,15 +36,16 @@ class Good(db.Model, BaseModel):
     __bind_key__ = 'app'
     __tablename__ = 'good'
     
-    GOOD_STATES_ENUM = ['pending', 'released', 'locked', 'sold', 'reported', 'canceled', 'deleted']
+    # GOOD_STATES_ENUM = ['pending', 'released', 'locked', 'sold', 'reported', 'canceled', 'deleted']
+    GOOD_STATES_ENUM = ['pending', 'released', 'locked', 'sold', 'canceled', 'deleted']
     good_id = Column('uid', Integer, primary_key=True)
     seller_id = Column(Integer, nullable=False)
     state = Column(Enum(*GOOD_STATES_ENUM), nullable=False, default=GOOD_STATES_ENUM[0])
     game = Column(String(256))
     title = Column(String(256))
-    detail = Column(String(256))
+    detail = Column(String(1024))
     price = Column(DECIMAL(10, 2))
-    publish_time = Column(DateTime, nullable=False, default=datetime.utcnow)
+    publish_time = Column(DateTime)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

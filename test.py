@@ -1,55 +1,62 @@
-
-from pydantic import BaseModel
-import jsonpickle
-
-import json
-
-
-class RouteMeta():
-    title: str
-    # icon: str | None = None
-    # expended: bool | None = None
-    # orderNo: int | None = None
-    # hidden: bool | None = None
-    # hiddenBreadcrumb: bool | None = None
-    # single: bool | None = None
-    # keepAlive: bool | None = None
-    # frameSrc: str | None = None
-    # frameBlank: bool | None = None
-
-    
-    def __init__(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, value)
+import re
+from pathlib import Path
+from pathlib import WindowsPath
+from typing import Optional, List
 
 
+class DirectionTree:
+    def __init__(self,
+                 direction_name: str = 'WorkingDirection',
+                 direction_path: str = '.',
+                 ignore_list: Optional[List[str]] = None):
+        self.owner: WindowsPath = Path(direction_path)
+        self.tree: str = direction_name + '/\n'
+        self.ignore_list = ignore_list
+        if ignore_list is None:
+            self.ignore_list = []
+        self.direction_ergodic(path_object=self.owner, n=0)
 
-            
-class RouteItem():
-    path: str
-    name: str
-    # component: str | None = None
-    # components: str | None = None
-    # redirect: str | None = None
-    # meta: RouteMeta
-    # children: list | None = None
+    def tree_add(self, path_object: WindowsPath, n=0, last=False):
+        if n > 0:
+            if last:
+                self.tree += '│' + ('    │' * (n - 1)) + '    └────' + path_object.name
+            else:
+                self.tree += '│' + ('    │' * (n - 1)) + '    ├────' + path_object.name
+        else:
+            if last:
+                self.tree += '└' + ('──' * 2) + path_object.name
+            else:
+                self.tree += '├' + ('──' * 2) + path_object.name
+        if path_object.is_file():
+            self.tree += '\n'
+            return False
+        elif path_object.is_dir():
+            self.tree += '/\n'
+            return True
 
-    def __init__(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, value)
+    def filter_file(self, file):
+        for item in self.ignore_list:
+            if re.fullmatch(item, file.name):
+                return False
+        return True
 
-            
-test = RouteItem(path='base', name='ListBase', component='/list/base/index', meta=RouteMeta(title='基础列表页'))
-router_list = []
-router_list.append(RouteItem(path='/list', name='list', component='LAYOUT', redirect='/list/base', meta=RouteMeta(title='哈哈哈哈哈', icon='view-list'), 
-                                children=[RouteItem(path='base', name='ListBase', component='/list/base/index', meta=RouteMeta(title='基础列表页')), 
-                                        RouteItem(path='card', name='ListCard', component='/list/card/index', meta=RouteMeta(title='卡片列表页')), 
-                                        RouteItem(path='filter', name='ListFilter', component='/list/filter/index', meta=RouteMeta(title='筛选列表页')), 
-                                        RouteItem(path='tree', name='ListTree', component='/list/tree/index', meta=RouteMeta(title='树状筛选列表页'))]))
+    def direction_ergodic(self, path_object: WindowsPath, n=0):
+        dir_file: list = list(path_object.iterdir())
+        dir_file.sort(key=lambda x: x.name.lower())
+        dir_file = [f for f in filter(self.filter_file, dir_file)]
+        for i, item in enumerate(dir_file):
+            if i + 1 == len(dir_file):
+                if self.tree_add(item, n, last=True):
+                    self.direction_ergodic(item, n + 1)
+            else:
+                if self.tree_add(item, n, last=False):
+                    self.direction_ergodic(item, n + 1)
 
-encodejson = jsonpickle.encode(router_list[0], unpicklable=False)
 
-print(encodejson)
-
-print(json.loads(encodejson))
-# print([i.__dict__ for i in router_list])
+if __name__ == '__main__':
+    i_l = [
+        '\.git', '__pycache__', 'test.+', '\.venv', '.+\.whl', '\.idea', '.+\.jpg', '.+\.png',
+        'image', 'css', 'admin', 'db.sqlite3', '\.pytest_cache'
+    ]
+    tree = DirectionTree(ignore_list=i_l, direction_path='./')
+    print(tree.tree)

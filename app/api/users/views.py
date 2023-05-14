@@ -5,8 +5,10 @@ from sqlalchemy import and_
 from sqlalchemy.sql import text
 
 from ...models import BaseResponse
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 import json
+
+from ..goods.models import Good
 
 @users.route('/<int:user_id>', methods=['GET'])
 @jwt_required()
@@ -18,32 +20,33 @@ def get_user_info(user_id):
     return BaseResponse(data=user_info.to_dict()).dict()
 
 @users.route('/hi', methods=['GET'])
+@jwt_required()
 def hi():
-    return BaseResponse(message='hi', data={'hello': 'from flask'}).dict()
+    return BaseResponse(message='hi', data={'hello': 'hi! user: ' + get_jwt_identity()}).dict()
 
 
 @users.route('/', methods=['GET'])
 @jwt_required()
 def get_user_list():
     filter_condition = set()
-    # print(request.args.to_dict())
-    filter_condition.add(User.username.like('%' + request.args.get('username') + '%'))
-    filter_condition.add(User.nickname.like('%' + request.args.get('nickname') + '%'))
-    filter_condition.add(User.email.like('%' + request.args.get('email') + '%'))
-    filter_condition.add(User.realname.like('%' + request.args.get('realname') + '%'))
-    filter_condition.add(User.id_number.like('%' + request.args.get('id_number') + '%'))
-    if request.args.get('user_id'):
-        filter_condition.add(User.user_id == request.args.get('user_id'))
-     
-    order = request.args.get('order_by')
-    order_map = ['dec', 'asc']
-    if request.args.get('order') in order_map:
-        order = request.args.get('order') + order
+    filter_condition.add(User._username.like('%' + request.args.get('username', '', type=str) + '%'))
+    filter_condition.add(User.nickname.like('%' + request.args.get('nickname', '', type=str) + '%'))
+    filter_condition.add(User._email.like('%' + request.args.get('email', '', type=str) + '%'))
+    filter_condition.add(User.realname.like('%' + request.args.get('realname', '', type=str) + '%'))
+    filter_condition.add(User.id_number.like('%' + request.args.get('id_number', '', type=str) + '%'))
+    if request.args.get('blocked', '', type=str).lower() in ['true', 'false']:
+        filter_condition.add(User.blocked == (request.args.get('blocked', '', type=str).lower() == 'true'))
+    if request.args.get('uid'):
+        filter_condition.add(User.user_id == request.args.get('uid'))
+    
+    order_by = request.args.get('order_by', '', type=str)
+    order_list = ['asc', 'desc']
+    if request.args.get('order') in order_list:
+        order_by = order_by + ' ' + request.args.get('order', '')
         
+    query_result = User.query.order_by(text(order_by)).filter(and_(*filter_condition)).paginate(page=request.args.get('page', 1, type=int), per_page=request.args.get('limit', 20, type=int))
     
-    query_result = User.query.order_by(text(order)).filter(and_(*filter_condition)).paginate(page=request.args.get('page', 1, type=int), per_page=request.args.get('per_page', 10, type=int)).items
-    
-    return BaseResponse(data={'users': [i.to_dict() for i in query_result]}).dict()
+    return BaseResponse(data={'users': [i.to_dict() for i in query_result], 'count': query_result.total, 'page': query_result.pages}).dict()
 
 
 
@@ -89,9 +92,6 @@ def modify_user(user_id):
 @users.route('/<int:user_id>', methods=['PATCH'])
 @jwt_required()
 def block_user(user_id):
-    if request.content_type != 'application/json':
-        return BaseResponse(code=400, message='content type must be application/json').dict()
-    
     if not User.query.filter_by(user_id=user_id).first():
         return BaseResponse(code=404, message='user not found').dict()
     
@@ -105,6 +105,11 @@ def block_user(user_id):
         return BaseResponse(code=400, message='blocked must be true or false').dict()
     
     User.query.filter_by(user_id=user_id).update({'blocked': data['blocked']})
+    
+    if data['blocked'] == True:
+        goods_list = Good.query.filter_by(seller_id=user_id, state='released').all()
+        for _ in goods_list:
+             _.state = 'locked'
     
     return BaseResponse(data = User.query.filter_by(user_id=user_id).first().to_dict()).dict()
 

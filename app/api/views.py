@@ -23,7 +23,10 @@ def get_menu_list():
     router_list.append(RouteItem(path='/app', name='app', component='LAYOUT', meta=RouteMeta(title='业务管理', icon='app'),
                                  children=[RouteItem(path='user', name='AppUser', component='/app/user/index', meta=RouteMeta(title='用户管理')),
                                            RouteItem(path='user/create', name='AppCreateUser', component='/app/user/createForm/index', meta=RouteMeta(title='创建用户', hidden=True)),
+                                           RouteItem(path='user/edit', name='AppEditUser', component='/app/user/editForm/index', meta=RouteMeta(title='编辑用户', hidden=True)),
                                            RouteItem(path='good', name='AppGood', component='/app/good/index', meta=RouteMeta(title='货物管理')),
+                                           RouteItem(path='good/create', name='AppCreateGood', component='/app/good/createForm/index', meta=RouteMeta(title='创建货物', hidden=True)),
+                                           RouteItem(path='good/edit', name='AppEditGood', component='/app/good/editForm/index', meta=RouteMeta(title='编辑货物', hidden=True)),
                                            RouteItem(path='issue', name='AppIssue', component='/app/issue/index', meta=RouteMeta(title='纠纷管理'))]))
     router_list.append(RouteItem(path='/payment', name='payment', component='LAYOUT', meta=RouteMeta(title='支付管理', icon='money-circle'),
                                  children=[RouteItem(path='wallet', name='PaymentWallet', component='/payment/wallet/index', meta=RouteMeta(title='钱包管理')),
@@ -31,15 +34,15 @@ def get_menu_list():
                                            RouteItem(path='system', name='PaymentSystem', component='/payment/system/index', meta=RouteMeta(title='系统管理'))]))
     
     
-    router_list.append(RouteItem(path='/list', name='list', component='LAYOUT', redirect='/list/base', meta=RouteMeta(title='test pages', icon='view-list'), 
-                                    children=[RouteItem(path='base', name='ListBase', component='/list/base/index', meta=RouteMeta(title='基础列表页')), 
-                                            RouteItem(path='card', name='ListCard', component='/list/card/index', meta=RouteMeta(title='卡片列表页')), 
-                                            RouteItem(path='filter', name='ListFilter', component='/list/filter/index', meta=RouteMeta(title='筛选列表页')), 
-                                            RouteItem(path='tree', name='ListTree', component='/list/tree/index', meta=RouteMeta(title='树状筛选列表页')),
-                                            RouteItem(path='test', name='Test', component='/testpage', meta=RouteMeta(title='测试页面'))]))
+    # router_list.append(RouteItem(path='/list', name='list', component='LAYOUT', redirect='/list/base', meta=RouteMeta(title='test pages', icon='view-list'), 
+    #                                 children=[RouteItem(path='base', name='ListBase', component='/list/base/index', meta=RouteMeta(title='基础列表页')), 
+    #                                         RouteItem(path='card', name='ListCard', component='/list/card/index', meta=RouteMeta(title='卡片列表页')), 
+    #                                         RouteItem(path='filter', name='ListFilter', component='/list/filter/index', meta=RouteMeta(title='筛选列表页')), 
+    #                                         RouteItem(path='tree', name='ListTree', component='/list/tree/index', meta=RouteMeta(title='树状筛选列表页')),
+    #                                         RouteItem(path='test', name='Test', component='/testpage', meta=RouteMeta(title='测试页面'))]))
     # router_list.append(RouteItem(path='/admin', name='admin', component='LAYOUT', meta=RouteMeta(title='系统管理', icon='setting'),
-    #                              children=[RouteItem(path='user', name='AdminUser', component='/admin/user/index', meta=RouteMeta(title='用户管理')),
-    #                                        RouteItem(paht='log', name='AdminLog', component='/admin/log/index', meta=RouteMeta(title='日志管理')),
+                                #  children=[RouteItem(path='user', name='AdminUser', component='/admin/user/index', meta=RouteMeta(title='用户管理')),
+                                        #    RouteItem(paht='log', name='AdminLog', component='/admin/log/index', meta=RouteMeta(title='日志管理')),
     #                                        RouteItem(path='setting', name='AdminSetting', component='/admin/setting/index', meta=RouteMeta(title='系统设置'))]))
     
     router_list.append(RouteItem(path='/setting', name='setting', component='LAYOUT', meta=RouteMeta(title='系统设置', icon='setting'),
@@ -78,8 +81,13 @@ def get_dashboard_info():
     # issue_count = Issue.query.count()
     # sys_start_time = start_time
     url = "http://localhost:5000/dev/chat"
-    response = requests.request("GET", url)
-    user_online = response.json()['code']
+    # user_online = 0
+    try:
+        response = requests.request("GET", url)
+        user_online = response.json()['code']
+    except:
+        user_online = -1
+    
     print(user_online)
     
     DashboardPanelList = []

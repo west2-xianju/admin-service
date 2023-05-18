@@ -9,6 +9,8 @@ from flask_jwt_extended import jwt_required
 import json
 from datetime import datetime
 
+from .schemas import UpdateGoodForm, CreateGoodForm
+
 @goods.route('/', methods=['GET'])
 @jwt_required()
 def get_goods_list():
@@ -49,8 +51,8 @@ def get_good_info(good_id):
 
 @goods.route('/<int:good_id>', methods=['PUT'])
 @jwt_required()
-def modify_good_info(good_id):
-    if request.content_type != 'application/json':
+def update_good(good_id):
+    if 'application/json' not in request.content_type:
         return BaseResponse(code=400, message='content type must be application/json').dict()
 
     if not Good.query.filter_by(good_id=good_id).first():
@@ -60,8 +62,10 @@ def modify_good_info(good_id):
         return BaseResponse(code=400, message='request data is empty').dict()
 
     data = json.loads(request.data)
-
-    Good.query.filter_by(good_id=good_id).update(data)
+    
+    updateForm = UpdateGoodForm(**data)
+    print(updateForm)
+    Good.query.filter_by(good_id=good_id).update(dict(updateForm))
 
     return BaseResponse(data=Good.query.filter_by(good_id=good_id).first().to_dict()).dict()
 
@@ -113,6 +117,8 @@ def add_good():
     if 'application/json' not in request.content_type:
         return BaseResponse(code=400, message='content type must be application/json').dict()
 
-    result = Good().from_dict(json.loads(request.data))
+    data = json.loads(request.data)
+    createForm = CreateGoodForm(**data)
+    result = Good().from_dict(dict(createForm))
 
     return BaseResponse(data=result.to_dict()).dict()

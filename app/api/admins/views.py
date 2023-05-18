@@ -31,7 +31,7 @@ def get_admin_info(admin_id):
 @admins.route('/', methods=['POST'])
 @jwt_required()
 def create_admin():
-    if request.content_type != 'application/json':
+    if 'application/json' not in request.content_type:
         return BaseResponse(code=400, message='content type must be application/json').dict()
     
     if not request.data:
@@ -48,7 +48,7 @@ def create_admin():
 @admins.route("/<int:admin_id>", methods=["PUT"])
 @jwt_required()
 def modify_admin(admin_id):
-    if request.content_type != 'application/json':
+    if 'application/json' not in request.content_type:
         return BaseResponse(code=400, message='content type must be application/json').dict()
     
     if not AdminUser.query.filter_by(admin_id=admin_id).first():
@@ -59,9 +59,12 @@ def modify_admin(admin_id):
     
     data = json.loads(request.data)
     
-    from ..auth.models import hash_and_salt_password
-    hashed_password = hash_and_salt_password(data['password'])
-    data.update({'password': hashed_password})
+    try:
+        from ..auth.models import hash_and_salt_password
+        hashed_password = hash_and_salt_password(data['password'])
+        data.update({'password': hashed_password})
+    except:
+        pass
     
     AdminUser.query.filter_by(admin_id=admin_id).update(data)
     

@@ -58,8 +58,8 @@ class Order(db.Model, BaseModel):
             'good_id': self.good_id,
             'state': self.state,
             'price': self.price,
-            'create_time': self.create_time,
-            'pay_time': self.pay_time,
+            'create_time': datetime.isoformat(self.create_time, sep=' '),
+            'pay_time': datetime.isoformat(self.pay_time, sep=' '),
             'complete_time': self.complete_time
             }
         

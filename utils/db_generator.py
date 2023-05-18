@@ -12,9 +12,18 @@ from app.api.wallets.models import Wallet
 from app.api.issues.models import Issue
 from app.api.orders.models import Order
 
+import sqlalchemy
+import os
+from sqlalchemy.orm import Session
+
 class FakeGenerator:
     def __init__(self):
-        # in case the tables haven't been created already
+        engine = sqlalchemy.create_engine(os.environ.get("DATABASE_BASE_URI"))
+        with Session(engine) as session:
+            statement = sqlalchemy.text('create database app_dev')
+            result = session.execute(statement)
+
+                
         db.drop_all()
         db.create_all()
 

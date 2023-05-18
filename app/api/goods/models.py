@@ -59,7 +59,7 @@ class Good(db.Model, BaseModel):
             'title': self.title,
             'detail': self.detail,
             'price': self.price,
-            'publish_time': self.publish_time
+            'publish_time': datetime.isoformat(self.publish_time, sep=' ')
             }
         
 

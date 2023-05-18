@@ -9,6 +9,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 import json
 
 from ..goods.models import Good
+from .schemas import UpdateUserForm
 
 @users.route('/<int:user_id>', methods=['GET'])
 @jwt_required()
@@ -18,11 +19,6 @@ def get_user_info(user_id):
     if not user_info:
         return BaseResponse(code=404, message='user not found').dict()
     return BaseResponse(data=user_info.to_dict()).dict()
-
-@users.route('/hi', methods=['GET'])
-@jwt_required()
-def hi():
-    return BaseResponse(message='hi', data={'hello': 'hi! user: ' + get_jwt_identity()}).dict()
 
 
 @users.route('/', methods=['GET'])
@@ -54,7 +50,7 @@ def get_user_list():
 @users.route('/', methods=['POST'])
 @jwt_required()
 def add_user():
-    if request.content_type != 'application/json':
+    if 'application/json' not in request.content_type:
         return BaseResponse(code=400, message='content type must be application/json').dict()
     
     data = json.loads(request.data)
@@ -71,19 +67,26 @@ def add_user():
 # modify user info
 @users.route('/<int:user_id>', methods=['PUT'])
 @jwt_required()
-def modify_user(user_id):
-    if request.content_type != 'application/json':
+def update_user(user_id):
+    if 'application/json' not in request.content_type:
         return BaseResponse(code=400, message='content type must be application/json').dict()
     
+    print(request.data)
     data = json.loads(request.data)
     if not User.query.filter_by(user_id=user_id).first():
         return BaseResponse(code=404, message='user not found').dict()
     
-    from .models import hash_and_salt_password
-    hashed_password = hash_and_salt_password(data['password'])
-    data.update({'password': hashed_password})
+    try:
+        from .models import hash_and_salt_password
+        hashed_password = hash_and_salt_password(data['password'])
+        data.update({'password': hashed_password})
+    except:
+        pass
     
-    User.query.filter_by(user_id=user_id).update(dict(data))
+    updateForm = UpdateUserForm(**data)
+    print(updateForm)
+    User.query.filter_by(user_id=user_id).update(dict(updateForm))
+    # User.query.filter_by(user_id=user_id).update({'blocked': True})
     
     return BaseResponse(data = User.query.filter_by(user_id=user_id).first().to_dict()).dict()
 

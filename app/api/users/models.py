@@ -131,7 +131,7 @@ class User(db.Model, BaseModel):
             'profile': '',
             'email': self.email,
             'blocked': self.blocked,
-            'register_time': self.register_time
+            'register_time': datetime.isoformat(self.register_time, sep=' ')
             }
         
 

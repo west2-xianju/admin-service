@@ -1,3 +1,11 @@
+from pydantic import BaseModel
+
+class BaseResponse(BaseModel):
+    code: int = 200
+    message: str = 'success'
+    data: dict = {}
+
+
 class RouteMeta():
     title: str
     # icon: str | None = None
@@ -14,8 +22,6 @@ class RouteMeta():
     def __init__(self, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
-
-
 
             
 class RouteItem():

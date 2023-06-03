@@ -34,7 +34,7 @@ class BaseModel:
 
 class Good(db.Model, BaseModel):
     __bind_key__ = 'app'
-    __tablename__ = 'good'
+    __tablename__ = 'goods'
     
     # GOOD_STATES_ENUM = ['pending', 'released', 'locked', 'sold', 'reported', 'canceled', 'deleted']
     GOOD_STATES_ENUM = ['pending', 'released', 'locked', 'sold', 'canceled', 'deleted']

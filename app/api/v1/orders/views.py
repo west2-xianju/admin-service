@@ -4,7 +4,7 @@ from .models import Order
 from sqlalchemy import and_
 from sqlalchemy.sql import text
 
-from ...models import BaseResponse
+from ..models import BaseResponse
 from flask_jwt_extended import jwt_required
 import json
 

@@ -5,12 +5,12 @@ from hashlib import md5
 import forgery_py
 import logging
 from app import db
-from app.api.auth.models import AdminUser
-from app.api.users.models import User
-from app.api.goods.models import Good
-from app.api.wallets.models import Wallet
-from app.api.issues.models import Issue
-from app.api.orders.models import Order
+from app.api.v1.auth.models import AdminUser
+from app.api.v1.users.models import User
+from app.api.v1.goods.models import Good
+from app.api.v1.wallets.models import Wallet
+from app.api.v1.issues.models import Issue
+from app.api.v1.orders.models import Order
 
 import sqlalchemy
 import os

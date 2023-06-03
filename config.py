@@ -51,9 +51,9 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = create_admin_sqlalchemy_uri("admin")
+    SQLALCHEMY_DATABASE_URI = create_admin_sqlalchemy_uri("admin_dev")
     SQLALCHEMY_BINDS = {
-        'app': create_app_sqlalchemy_uri('app'),
+        'app': create_app_sqlalchemy_uri('xianjudatabase'),
     }
 
 

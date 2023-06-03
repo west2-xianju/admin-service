@@ -8,7 +8,7 @@ if os.path.exists(dotenv_path):
 from flask import Flask
 from app import create_app, db
 import click
-app = create_app('development')
+app = create_app('production')
 
 # @app.cli.command()
 # def test():

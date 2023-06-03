@@ -3,13 +3,13 @@ from . import dev
 
 from ..goods.models import Good
 
-from ...models import BaseResponse
+from ..models import BaseResponse
 from flask_jwt_extended import create_access_token
 from app.utils import jwt_functions
 from app import Config
 import logging
 import jwt
-from app.api.auth.models import AdminUser
+from ..auth.models import AdminUser
 
 # @dev.route('/auth/<int:user_id>', methods=['GET'])
 # def get_admin_token(user_id):
@@ -30,6 +30,14 @@ def get_user_jwt(user_id):
     if not adminInfo:
         return BaseResponse(code=404, message='user not found').dict()
     
-    token = jwt_functions.generate_jwt({'user_id': user_id, 'role': adminInfo.level})
+    token = jwt_functions.generate_jwt({'username': adminInfo.username, 'user_id': user_id, 'role': adminInfo.level})
 
     return BaseResponse(data={'token': token, 'token_type': 'Bearer'}).dict()
+
+@dev.route('/auth/app/<int:user_id>', methods=['GET'])
+def get_app_user_jwt(user_id):
+    token = jwt.encode({'userid': user_id, 'blocked': False}, key='XianJuJWT', algorithm='HS256')
+    # token = jwt_functions.generate_jwt({'userid': user_id, 'blocked': False}, secret='XianJuJWT')
+
+    return BaseResponse(data={'token': token, 'token_type': 'Bearer'}).dict()
+

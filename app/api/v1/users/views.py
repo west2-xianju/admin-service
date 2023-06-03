@@ -4,7 +4,7 @@ from .models import User
 from sqlalchemy import and_
 from sqlalchemy.sql import text
 
-from ...models import BaseResponse
+from ..models import BaseResponse
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import json
 
@@ -28,8 +28,10 @@ def get_user_list():
     filter_condition.add(User._username.like('%' + request.args.get('username', '', type=str) + '%'))
     filter_condition.add(User.nickname.like('%' + request.args.get('nickname', '', type=str) + '%'))
     filter_condition.add(User._email.like('%' + request.args.get('email', '', type=str) + '%'))
-    filter_condition.add(User.realname.like('%' + request.args.get('realname', '', type=str) + '%'))
-    filter_condition.add(User.id_number.like('%' + request.args.get('id_number', '', type=str) + '%'))
+    if request.args.get('realname', None, type=str):
+        filter_condition.add(User.realname.like('%' + request.args.get('realname', '', type=str) + '%'))
+    if request.args.get('id_number', None, type=str):
+        filter_condition.add(User.id_number.like('%' + request.args.get('id_number', '', type=str) + '%'))
     if request.args.get('blocked', '', type=str).lower() in ['true', 'false']:
         filter_condition.add(User.blocked == (request.args.get('blocked', '', type=str).lower() == 'true'))
     if request.args.get('uid'):
@@ -41,7 +43,8 @@ def get_user_list():
         order_by = order_by + ' ' + request.args.get('order', '')
         
     query_result = User.query.order_by(text(order_by)).filter(and_(*filter_condition)).paginate(page=request.args.get('page', 1, type=int), per_page=request.args.get('limit', 20, type=int))
-    
+    # query_result = User.query.all()
+    # return BaseResponse(data={'users': [i.to_dict() for i in query_result], 'count': len(query_result), 'page': 1}).dict()
     return BaseResponse(data={'users': [i.to_dict() for i in query_result], 'count': query_result.total, 'page': query_result.pages}).dict()
 
 

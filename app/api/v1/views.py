@@ -3,13 +3,13 @@ from . import api
 from .models import RouteItem, RouteMeta
 import jsonpickle
 
-from ..models import BaseResponse
+from .models import BaseResponse
 from .users.models import User
 from .goods.models import Good
 from .issues.models import Issue
 from .wallets.models import Wallet
 from flask_jwt_extended import jwt_required
-from ..utils import jwt_functions
+from app.utils import jwt_functions
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from .auth.models import AdminUser
 import json, requests
@@ -24,8 +24,6 @@ def get_menu_list():
     user_info = AdminUser.query.filter_by(username=username).first()
     
     router_list = []
-    
-    print(user_info.level)
     if user_info:
         router_list.append(RouteItem(path='/censor2', name='censor2', component='LAYOUT', meta=RouteMeta(title=f'{user_info.username}:{user_info.level}', icon='user-talk'), 
                                  children=[RouteItem(path='good', name='CensorGood', component='/censor/good/index', meta=RouteMeta(title='货物审核')), 

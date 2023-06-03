@@ -18,10 +18,10 @@ from sqlalchemy.orm import Session
 
 class FakeGenerator:
     def __init__(self):
-        engine = sqlalchemy.create_engine(os.environ.get("DATABASE_BASE_URI"))
-        with Session(engine) as session:
-            statement = sqlalchemy.text('create database app_dev')
-            result = session.execute(statement)
+        # engine = sqlalchemy.create_engine(os.environ.get("DATABASE_BASE_URI"))
+        # with Session(engine) as session:
+        #     statement = sqlalchemy.text('create database app_dev')
+        #     result = session.execute(statement)
 
                 
         db.drop_all()

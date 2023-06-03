@@ -11,7 +11,7 @@ def generate_jwt(payload, expiry=expiry_date(), secret=None):
         'exp': expiry,
         }
     _payload.update(payload)
-        
+    
     if not secret:
         secret = Config.JWT_SECRET
         

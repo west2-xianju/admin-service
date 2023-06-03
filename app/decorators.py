@@ -7,31 +7,55 @@ import functools
 # verify it check if valid
 
 def login_required(f):
-    @functools.wraps(f)
     def wrapper(*args, **kwargs):
-        if not request.headers.get('Authorization'):
-            return BaseResponse(code=401, message='No token').dict()
+        @functools.wraps(f)
+        def decorator(*args, **kwargs):
+            if not request.headers.get('Authorization'):
+                return BaseResponse(code=401, message='No token').dict()
 
-        token = request.headers.get('Authorization').split(' ')[1]
-        payload = jwt_functions.verify_jwt(token)
+            token = request.headers.get('Authorization').split(' ')[1]
+            payload = jwt_functions.verify_jwt(token)
 
-        if not payload:
-            return BaseResponse(code=401, message='invalid token').dict()
+            if not payload:
+                return BaseResponse(code=401, message='invalid token').dict()
 
-        return f(*args, **kwargs)
-    return wrapper
-
-def token_required_socket(f):
-    @functools.wraps(f)
-    def wrapper(*args, **kwargs):
-        if not session.get('token'):
-            emit('status', {'msg': 'No token'})
-            disconnect()
-        
-        payload = jwt_functions.verify_jwt(session.get('token'))
-        if not payload:
-            emit('status', {'msg': 'invalid token'})
-            disconnect()
-        return f(*args, **kwargs)
+            return f(*args, **kwargs)
+        return decorator
     
     return wrapper
+
+# def token_required_socket(f):
+#     @functools.wraps(f)
+#     def wrapper(*args, **kwargs):
+#         if not session.get('token'):
+#             emit('status', {'msg': 'No token'})
+#             disconnect()
+        
+#         payload = jwt_functions.verify_jwt(session.get('token'))
+#         if not payload:
+#             emit('status', {'msg': 'invalid token'})
+#             disconnect()
+#         return f(*args, **kwargs)
+    
+#     return wrapper
+
+def role_required(role_list):
+    def decorator(f):
+        @functools.wraps(f)
+        def wrapper(*args, **kwargs):
+            if not request.headers.get('Authorization'):
+                return BaseResponse(code=401, message='No token').dict()
+
+            token = request.headers.get('Authorization').split(' ')[1]
+            payload = jwt_functions.verify_jwt(token)
+
+            if not payload:
+                return BaseResponse(code=401, message='invalid token').dict()
+
+            if payload['role'] not in role_list:
+                return BaseResponse(code=401, message='permission denied').dict()
+
+            return f(*args, **kwargs)
+        return wrapper
+    return decorator
+

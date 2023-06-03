@@ -25,7 +25,7 @@ def admin_login():
     if not user_info.verify_password(request.json.get('password')):
         return BaseResponse(code=400, message='password error').dict()
     
-    token = create_access_token(identity=user_info.username)
+    token = create_access_token(identity=user_info.username, additional_claims={'role': user_info.level})
     
     return BaseResponse(data={'token': token, 'token_type': 'Bearer'}).dict()
 

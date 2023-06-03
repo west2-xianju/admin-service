@@ -60,7 +60,7 @@ class AdminUser(db.Model, BaseModel):
     
     ADMINUSER_LEVEL_ENUM = ['superuser', 'admin']
     admin_id = Column(Integer, nullable=True, primary_key=True, unique=True)
-    username = Column(String(20), nullable=False)
+    username = Column(String(20), nullable=False, unique=True)
     _password = Column('password', String(128), nullable=False)
     level = Column(Enum(*ADMINUSER_LEVEL_ENUM), nullable=False, default=ADMINUSER_LEVEL_ENUM[1])
     create_time = Column(DateTime, nullable=False, default=datetime.utcnow)
@@ -93,5 +93,5 @@ class AdminUser(db.Model, BaseModel):
             'admin_id': self.admin_id,
             'username': self.username,
             'level': self.level,
-            'create_time': self.create_time
+            'create_time': datetime.isoformat(self.create_time, ' ')
             }

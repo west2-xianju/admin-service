@@ -62,7 +62,7 @@ class Good(db.Model, BaseModel):
             'game': self.game,
             'title': self.title,
             'detail': self.detail,
-            'price': self.price,
+            'price': float(self.price),
             'publish_time': time
             }
         

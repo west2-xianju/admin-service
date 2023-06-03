@@ -59,7 +59,7 @@ class Order(db.Model, BaseModel):
             'to_id': self.to_id,
             'good_id': self.good_id,
             'state': self.ORDER_STATE_ENUM_DESCRIPTION[int(self.state)-1],
-            'price': self.price,
+            'price': float(self.price),
             'create_time': datetime.isoformat(self.create_time, sep=' '),
             'pay_time': datetime.isoformat(self.pay_time, sep=' '),
             # 'complete_time': self.complete_time

@@ -20,7 +20,7 @@ class Config:
     SQLALCHEMY_RECORD_QUERIES = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_ACCESS_TOKEN_EXPIRES = 36000
-    JWT_SECRET = 'testing'
+    JWT_SECRET = os.environ.get("SECRET_KEY") or 'testing'
     JWT_EXPIRY = 36000
 
     @staticmethod

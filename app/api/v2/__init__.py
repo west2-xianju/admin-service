@@ -1,6 +1,16 @@
 
 from flask import Blueprint
 # from . import auth, dev, users
+from flask_restful import Api
+
+# restApi = Blueprint("restApi", __name__)
+# rest = Api(restApi)
+
+# from .goods import goods as goods_restful
+# rest.add_resource(goods_restful, '/goods')
+
+# from .issues import issues as issues_restful
+# rest.add_resource(issues_restful, '/issues')
 
 
 api = Blueprint("api", __name__)
@@ -28,6 +38,8 @@ api.register_blueprint(issues_blueprint, url_prefix='/issues')
 
 from .orders import orders as orders_blueprint
 api.register_blueprint(orders_blueprint, url_prefix='/orders')
+
+
 
 
 from . import views, models

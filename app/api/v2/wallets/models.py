@@ -48,7 +48,7 @@ class Wallet(db.Model, BaseModel):
             'uid': self.wallet_id,
             'user_id': self.user_id,
             # 'state': self.state,
-            'balance': self.balance,
+            'balance': float(self.balance),
             }
         
 

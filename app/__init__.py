@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from config import config, Config
 from flask_cors import CORS
+from flask_restful import Api
 
 db = SQLAlchemy()
 
@@ -14,21 +15,9 @@ def create_app(config_name):
     db.init_app(app)
     
     jwt = JWTManager(app)
-
-    # from .api.v1.chat import chat as chat_blueprint
-    # app.register_blueprint(chat_blueprint)
     
     from .api.v2 import api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api')
-    
-    # from .api.dev import dev as dev_blueprint
-    # app.register_blueprint(dev_blueprint, url_prefix='/dev')
-    
-    # from .api.auth import auth as auth_blueprint
-    # app.register_blueprint(auth_blueprint, url_prefix='/auth')
-    
-    # from .api.users import users as users_blueprint
-    # app.register_blueprint(users_blueprint, url_prefix='/users')
     
     CORS(app, origins='*', supports_credentials=True)
     

@@ -45,9 +45,11 @@ class Goods(Resource):
             return BaseResponse(code=400, message='request data is empty').dict()
 
         data = json.loads(request.data)
+        
+        if data['state']:
+            data['state'] = Good.GOOD_STATES_ENUM[Good.GOOD_STATES_ENUM_DESCRIPTION.index(data['state'])]
 
         updateForm = UpdateGoodForm(**data)
-        print(updateForm)
         Good.query.filter_by(good_id=good_id).update(dict(updateForm))
 
         return BaseResponse(data=Good.query.filter_by(good_id=good_id).first().to_dict()).dict()

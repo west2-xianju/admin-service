@@ -19,6 +19,5 @@ def create_app(config_name):
     from .api.v2 import api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api')
     
-    CORS(app, origins='*', supports_credentials=True)
-    
+    CORS(app, origins="*", allow_credentials=True)
     return app

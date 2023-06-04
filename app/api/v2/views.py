@@ -53,7 +53,7 @@ def get_menu_list():
     #                              children=[RouteItem(path='test', name='Test', component='/test/index', meta=RouteMeta(title='测试页面'))
     #                                        ]))
     
-    router_list.append(RouteItem(path='/chat', name='chat', component='LAYOUT', meta=RouteMeta(title='聊天管理', icon='chat'),
+    router_list.append(RouteItem(path='/chatManagement', name='chat', component='LAYOUT', meta=RouteMeta(title='聊天管理', icon='chat'),
                                  children=[RouteItem(path='chat', name='Chat', component='/chat/index', meta=RouteMeta(title='聊天测试页面')),
                                            RouteItem(path='manager', name='ChatManager', component='/chat/manager/index', meta=RouteMeta(title='聊天管理页面'))
                                            ]))

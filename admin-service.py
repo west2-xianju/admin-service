@@ -8,6 +8,7 @@ if os.path.exists(dotenv_path):
 from flask import Flask
 from app import create_app, db
 import click
+from gevent import pywsgi
 app = create_app('production')
 
 # @app.cli.command()
@@ -43,5 +44,6 @@ if __name__ == '__main__':
     #     db.drop_all()
     #     db.create_all()
     #     FakeGenerator().start()
-    
-    Flask.run(app, host='0.0.0.0', port=int(os.environ.get('FLASK_PORT', '3000')))
+    server = pywsgi.WSGIServer(('0.0.0.0', 3000), app)
+    server.serve_forever()
+    # Flask.run(app, host='0.0.0.0', port=int(os.environ.get('FLASK_PORT', '3000')))

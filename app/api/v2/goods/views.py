@@ -114,7 +114,7 @@ def censor_good(good_id):
 
     STATE_MAP = {'allow': 'released', 'reject': 'locked'}
     Good.query.filter_by(good_id=good_id).update(
-        {'state': STATE_MAP[data.get('op')], 'publish_time': datetime.utcnow()})
+        {'state': Good.GOOD_STATES_ENUM[Good.GOOD_STATES_ENUM_DESCRIPTION.index(STATE_MAP[data.get('op')])], 'publish_time': datetime.utcnow()})
 
     return BaseResponse(data=Good.query.filter_by(good_id=good_id).first().to_dict()).dict()
 

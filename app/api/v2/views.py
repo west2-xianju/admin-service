@@ -104,7 +104,7 @@ def get_dashboard_info():
     # good_pending = Good.query.filter_by(state=Good.GOOD_STATES_ENUM[0]).count()
     # issue_count = Issue.query.count()
     # sys_start_time = start_time
-    url = "http://localhost:5000/dev/clients"
+    url = "http://172.19.0.100:5000/dev/clients"
     # user_online = 0
     try:
         response = requests.request("GET", url)

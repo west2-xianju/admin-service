@@ -5,12 +5,12 @@ from hashlib import md5
 import forgery_py
 import logging
 from app import db
-from app.api.v1.auth.models import AdminUser
-from app.api.v1.users.models import User
-from app.api.v1.goods.models import Good
-from app.api.v1.wallets.models import Wallet
-from app.api.v1.issues.models import Issue
-from app.api.v1.orders.models import Order
+from app.api.v2.auth.models import AdminUser
+from app.api.v2.users.models import User
+from app.api.v2.goods.models import Good
+from app.api.v2.wallets.models import Wallet
+from app.api.v2.issues.models import Issue
+from app.api.v2.orders.models import Order
 
 import sqlalchemy
 import os
@@ -65,7 +65,7 @@ class FakeGenerator:
             Wallet().from_dict({
                 'user_id': random.randint(1, count),
                 'balance': random.randint(1, 1000),
-                'state': random.choice(Wallet.WALLET_STATES_ENUM),
+                # 'state': random.choice(Wallet.WALLET_STATES_ENUM),
             })
             
             Issue().from_dict({

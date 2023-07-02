@@ -120,3 +120,12 @@ def censor_good(good_id):
 
     return BaseResponse(data=Good.query.filter_by(good_id=good_id).first().to_dict()).dict()
 
+@goods.route('/stats', methods=['GET'])
+@jwt_required()
+def get_good_stats():
+    released_goods_count = len(Good.query.filter_by(state=Good.GOOD_STATES_ENUM[1]).all())
+    total_goods_count = len(Good.query.all())
+    
+    ret_info = [{'value': total_goods_count-released_goods_count, 'name': '未上架'}, {'value': released_goods_count, 'name': '已上架'}]
+    
+    return BaseResponse(data={'stat': ret_info}).dict()

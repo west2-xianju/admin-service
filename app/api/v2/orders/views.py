@@ -1,12 +1,13 @@
 from flask import request
 from . import orders
 from .models import Order
-from sqlalchemy import and_
+from sqlalchemy import and_, extract, func
 from sqlalchemy.sql import text
 
 from ..models import BaseResponse
 from flask_jwt_extended import jwt_required
 import json
+from datetime import datetime
 
 from flask_restful import Resource, Api
 
@@ -38,3 +39,22 @@ class OrdersList(Resource):
         
 
 orderApi.add_resource(OrdersList, '/')
+
+@orders.route('/stats', methods=['GET'])
+@jwt_required()
+def get_order_stats():
+    this_week = datetime.now().isocalendar()[1]
+    this_month = datetime.now().month
+    
+    order_list_this_month = Order.query.filter(and_(Order.state == Order.ORDER_STATE_ENUM[2], extract('month', Order.create_time) == this_month)).all()
+    order_list_last_month = Order.query.filter(and_(Order.state == Order.ORDER_STATE_ENUM[2], extract('month', Order.create_time) == this_month-1%12)).all()
+    
+    this_month_amount_array = []
+    for i in range(1, 30):
+        this_month_amount_array.append(sum([j.price for j in order_list_this_month if j.create_time.day == i]))
+        
+    last_month_amount_array = []
+    for i in range(1, 30):
+        last_month_amount_array.append(sum([j.price for j in order_list_last_month if j.create_time.day == i]))
+        
+    return BaseResponse(data={'this_month': this_month_amount_array, 'last_month': last_month_amount_array}).dict()

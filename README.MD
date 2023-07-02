@@ -12,6 +12,13 @@ The service also provide APIs, see API doc for more information: https://www.api
 
 This repository serves as a API server for Xianju App management platform.
 
+## Feature
+
++ Restful
++ API version control
++ API role authentication control
+
+
 ## Deployment
 
 ### Default `.env` Content

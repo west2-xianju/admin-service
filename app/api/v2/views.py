@@ -53,9 +53,9 @@ def get_menu_list():
     #                              children=[RouteItem(path='test', name='Test', component='/test/index', meta=RouteMeta(title='测试页面'))
     #                                        ]))
     
-    router_list.append(RouteItem(path='/chatManagement', name='chat', component='LAYOUT', meta=RouteMeta(title='聊天管理', icon='chat'),
-                                 children=[RouteItem(path='chat', name='Chat', component='/chat/index', meta=RouteMeta(title='聊天测试页面')),
-                                           RouteItem(path='manager', name='ChatManager', component='/chat/manager/index', meta=RouteMeta(title='聊天管理页面'))
+    router_list.append(RouteItem(path='/chatTest', name='chat', component='LAYOUT', meta=RouteMeta(title='聊天管理', icon='chat'),
+                                 children=[RouteItem(path='chat', name='Chat', component='/chatTest/index', meta=RouteMeta(title='聊天测试页面')),
+                                           RouteItem(path='manager', name='ChatManager', component='/chatTest/manager/index', meta=RouteMeta(title='聊天管理页面'))
                                            ]))
     # router_list.append(RouteItem(path='/list', name='list', component='LAYOUT', redirect='/list/base', meta=RouteMeta(title='test pages', icon='view-list'), 
     #                                 children=[RouteItem(path='base', name='ListBase', component='/list/base/index', meta=RouteMeta(title='基础列表页')), 
@@ -104,13 +104,14 @@ def get_dashboard_info():
     # good_pending = Good.query.filter_by(state=Good.GOOD_STATES_ENUM[0]).count()
     # issue_count = Issue.query.count()
     # sys_start_time = start_time
-    url = "http://172.19.0.100:5000/dev/clients"
-    # user_online = 0
-    try:
-        response = requests.request("GET", url)
-        user_online = response.json()['data']['count']
-    except:
-        user_online = -1
+    
+    # url = "http://172.19.0.100:5000/dev/clients"
+    # # user_online = 0
+    # try:
+    #     response = requests.request("GET", url)
+    #     user_online = response.json()['data']['count']
+    # except:
+    user_online = -1
     
     print(user_online)
     
@@ -125,3 +126,8 @@ def get_dashboard_info():
     for _ in DashboardPanelList:
         print(jsonpickle.encode(_, unpicklable=False))
     return BaseResponse(data={'list':  json.loads(jsonpickle.encode(DashboardPanelList, unpicklable=False))}).dict()
+
+# @api.route('/dashboard/chart', methods=['GET'])
+# @jwt_required()
+# def get_dashboard_chart():
+    

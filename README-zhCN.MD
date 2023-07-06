@@ -1,16 +1,12 @@
 # Xianju-admin-service
 
-该仓库包含了使用 Flask 框架实现的管理后端服务。该服务提供了各种端点以执行特定任务，并可以使用 Docker 或手动部署。本 README 文件提供了该仓库的介绍和部署说明。
+该仓库包含了使用 Flask 框架实现的管理后端服务。该服务主要提供了 API 接口，并可以使用 Docker 或手动部署。本 README 文件提供了该仓库的介绍和部署说明。
 
 xianju-admin-frontend 仓库中提供了闲橘的后台管理。
 
-该服务还提供了 API，详细信息请参阅 API 文档：https://www.apifox.cn/apidoc/shared-75b228ec-c55b-4115-84c1-9dbcdb11ed5b
+详细信息请参阅 API 文档：https://www.apifox.cn/apidoc/shared-75b228ec-c55b-4115-84c1-9dbcdb11ed5b
 
-## 简介
-
-该仓库是 闲橘后台管理平台 的 API 服务器。
-
-## 特点
+## 特性
 
 + RESTful
 + API 版本控制
@@ -148,4 +144,4 @@ python chat-service.py
 
 ## 联系方式
 
-如果您有任何问题、建议或反馈，请随时通过 [zenor0@outlook.com](mailto:zenor0@outlook.com) 联系我们。感谢您对该项目的关注和参与。
+如果您有任何问题、建议或反馈，请随时通过 [zenor0@outlook.com](mailto:zenor0@outlook.com) 联系我们。

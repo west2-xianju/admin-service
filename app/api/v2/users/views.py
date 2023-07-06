@@ -44,8 +44,15 @@ class Users(Resource):
             return BaseResponse(code=400, message='request data is empty').dict()
 
         data = json.loads(request.data)
+        updateData = UpdateUserForm(**data)
+        print(updateData)
+        
+        userObject = User.query.filter_by(user_id=user_id).first()
+        
+        if data.get('password'):
+            userObject.password = data['password']
 
-        User.query.filter_by(user_id=user_id).update(dict(data))
+        User.query.filter_by(user_id=user_id).update(dict(updateData))
 
         return BaseResponse(data=User.query.filter_by(user_id=user_id).first().to_dict()).dict()
     

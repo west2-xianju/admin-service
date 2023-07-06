@@ -28,7 +28,7 @@ class FakeGenerator:
         db.create_all()
 
     def generate_fake_date(self):
-        return datetime.combine(forgery_py.date.date(True), datetime.utcnow().time())
+        return datetime.combine(forgery_py.date.date(True, max_delta=60), datetime.utcnow().time())
     
     def generate_fake_admin_data(self, count):
         for _ in range(count):

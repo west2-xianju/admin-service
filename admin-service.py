@@ -32,7 +32,7 @@ def clean_db():
 @app.cli.command()
 def fill_db():
     from utils.db_generator import FakeGenerator
-    FakeGenerator().start(count=200)
+    FakeGenerator().start(count=1000)
 
 
 if __name__ == '__main__':

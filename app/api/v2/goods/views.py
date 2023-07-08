@@ -25,15 +25,7 @@ class Goods(Resource):
             return BaseResponse(code=404, message='good not found').dict()
 
         return BaseResponse(data=good_info.to_dict()).dict()
-    def post(self):
-        if 'application/json' not in request.content_type:
-            return BaseResponse(code=400, message='content type must be application/json').dict()
 
-        data = json.loads(request.data)
-        createForm = CreateGoodForm(**data)
-        result = Good().from_dict(dict(createForm))
-
-        return BaseResponse(data=result.to_dict()).dict()
     def put(self, good_id):
         if 'application/json' not in request.content_type:
             return BaseResponse(code=400, message='content type must be application/json').dict()
@@ -96,6 +88,16 @@ class GoodsList(Resource):
         # return BaseResponse().dict()
 
         return BaseResponse(data={'goods': [i.to_dict() for i in query_result], 'count': query_result.total, 'page': query_result.pages}).dict()
+    def post(self):
+        if 'application/json' not in request.content_type:
+            return BaseResponse(code=400, message='content type must be application/json').dict()
+
+        data = json.loads(request.data)
+        createForm = CreateGoodForm(**data)
+        createForm.state = Good.GOOD_STATES_ENUM[Good.GOOD_STATES_ENUM_DESCRIPTION.index(createForm.state)]
+        result = Good().from_dict(dict(createForm))
+
+        return BaseResponse(data=result.to_dict()).dict()
 
 
 goodsApi.add_resource(Goods, '/<int:good_id>')

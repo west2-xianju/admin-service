@@ -44,6 +44,9 @@ class Wallets(Resource):
         if 'amount' not in data:
             return BaseResponse(code=400, message='amount is required').dict()
         
+        if float(data['amount']) <= 0:
+            return BaseResponse(code=400, message='positive number required').dict()
+        
         wallet_info = Wallet.query.filter_by(wallet_id=wallet_id).first()
         wallet_info.balance += decimal.Decimal(data['amount'])
         wallet_info.save()

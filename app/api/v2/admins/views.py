@@ -62,6 +62,16 @@ class Admins(Resource):
         AdminUser.query.filter_by(admin_id=admin_id).update(dict(updateData))
 
         return BaseResponse(data=AdminUser.query.filter_by(admin_id=admin_id).first().to_dict()).dict()
+    def delete(self, admin_id):
+        if 'application/json' not in request.content_type:
+            return BaseResponse(code=400, message='content type must be application/json').dict()
+        
+        if not AdminUser.query.filter_by(admin_id=admin_id).first():
+            return BaseResponse(code=404, message='admin not found').dict()
+        
+        result = AdminUser.query.filter_by(admin_id=admin_id).delete()
+
+        return BaseResponse(data={'delete_count': result}).dict()
 
 class AdminsList(Resource):
     method_decorators = [role_required(['superuser'])]

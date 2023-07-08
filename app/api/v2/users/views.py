@@ -24,14 +24,7 @@ class Users(Resource):
             return BaseResponse(code=404, message='user not found').dict()
 
         return BaseResponse(data=user_info.to_dict()).dict()
-    def post(self):
-        if 'application/json' not in request.content_type:
-            return BaseResponse(code=400, message='content type must be application/json').dict()
 
-        data = json.loads(request.data)
-        result = User().from_dict(dict(data))
-
-        return BaseResponse(data=result.to_dict()).dict()
     
     def put(self, user_id):
         if 'application/json' not in request.content_type:
@@ -45,7 +38,6 @@ class Users(Resource):
 
         data = json.loads(request.data)
         updateData = UpdateUserForm(**data)
-        print(updateData)
         
         userObject = User.query.filter_by(user_id=user_id).first()
         
@@ -97,6 +89,10 @@ class UsersList(Resource):
             filter_condition.add(User.blocked == (request.args.get('blocked', '', type=str).lower() == 'true'))
         if request.args.get('uid'):
             filter_condition.add(User.user_id == request.args.get('uid'))
+        if request.args.get('start', None, type=str):
+            filter_condition.add(User.register_time >= request.args.get('start', None, type=str))
+        if request.args.get('end', None, type=str):
+            filter_condition.add(User.register_time <= request.args.get('end', None, type=str))
         
         order_by = request.args.get('order_by', '', type=str)
         order_list = ['asc', 'desc']
@@ -105,7 +101,14 @@ class UsersList(Resource):
             
         query_result = User.query.order_by(text(order_by)).filter(and_(*filter_condition)).paginate(page=request.args.get('page', 1, type=int), per_page=request.args.get('limit', 20, type=int))
         return BaseResponse(data={'users': [i.to_dict() for i in query_result], 'count': query_result.total, 'page': query_result.pages}).dict()
-    
+    def post(self):
+        if 'application/json' not in request.content_type:
+            return BaseResponse(code=400, message='content type must be application/json').dict()
+
+        data = json.loads(request.data)
+        result = User().from_dict(dict(data))
+
+        return BaseResponse(data=result.to_dict()).dict()
     
 userApi.add_resource(Users, '/<int:user_id>')
 userApi.add_resource(UsersList, '/')

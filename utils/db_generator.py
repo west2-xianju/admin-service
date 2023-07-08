@@ -58,14 +58,14 @@ class FakeGenerator:
                 'game': forgery_py.forgery.address.city(),
                 'title': forgery_py.forgery.lorem_ipsum.title(),
                 'detail': forgery_py.forgery.lorem_ipsum.sentences(),
-                'price': random.randint(1, 100),
+                'price': random.randint(1, 100) + random.random(),
                 'publish_time': self.generate_fake_date(),
             })
             
             Wallet().from_dict({
                 'user_id': random.randint(1, count),
-                'balance': random.randint(1, 1000),
-                # 'state': random.choice(Wallet.WALLET_STATES_ENUM),
+                'balance': random.randint(1, 1000) + random.random(),
+                'state': random.choice(Wallet.WALLET_STATES_ENUM),
             })
             
             Issue().from_dict({
@@ -86,7 +86,7 @@ class FakeGenerator:
                 'from_id': random.randint(1, count),
                 'to_id': random.randint(1, count),
                 'good_id': random.randint(1, count),
-                'price': random.randint(1, 100),
+                'price': random.randint(1, 100) + random.random(),
                 'state': random.choice(Order.ORDER_STATE_ENUM),
                 'create_time': self.generate_fake_date(),
                 'pay_time': self.generate_fake_date(),

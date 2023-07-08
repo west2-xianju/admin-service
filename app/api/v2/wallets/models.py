@@ -38,7 +38,7 @@ class Wallet(db.Model, BaseModel):
     wallet_id = Column('uid', Integer, primary_key=True)
     user_id = Column(Integer, nullable=False, unique=True)
     balance = Column(DECIMAL(10, 2))
-    # state = Column(Enum(*WALLET_STATES_ENUM), nullable=False, default=WALLET_STATES_ENUM[0])
+    state = Column(Enum(*WALLET_STATES_ENUM), nullable=False, default=WALLET_STATES_ENUM[0])
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -47,7 +47,7 @@ class Wallet(db.Model, BaseModel):
         return {
             'uid': self.wallet_id,
             'user_id': self.user_id,
-            # 'state': self.state,
+            'state': self.state,
             'balance': float(self.balance),
             }
         

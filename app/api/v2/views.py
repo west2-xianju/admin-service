@@ -24,11 +24,11 @@ def get_menu_list():
     user_info = AdminUser.query.filter_by(username=username).first()
     
     router_list = []
-    if user_info:
-        router_list.append(RouteItem(path='/censor2', name='censor2', component='LAYOUT', meta=RouteMeta(title=f'{user_info.username}:{user_info.level}', icon='user-talk'), 
-                                 children=[RouteItem(path='good', name='CensorGood', component='/censor/good/index', meta=RouteMeta(title='货物审核')), 
-                                        #    RouteItem(path='user', name='CensorUser', component='/censor/user/index', meta=RouteMeta(title='用户审核'))
-                                           ]))
+    # if user_info:
+    #     router_list.append(RouteItem(path='/censor2', name='censor2', component='LAYOUT', meta=RouteMeta(title=f'{user_info.username}:{user_info.level}', icon='user-talk'), 
+    #                              children=[RouteItem(path='good', name='CensorGood', component='/censor/good/index', meta=RouteMeta(title='货物审核')), 
+    #                                     #    RouteItem(path='user', name='CensorUser', component='/censor/user/index', meta=RouteMeta(title='用户审核'))
+    #                                        ]))
     
     router_list.append(RouteItem(path='/censor', name='censor', component='LAYOUT', meta=RouteMeta(title='审核管理', icon='user-talk'), 
                                  children=[RouteItem(path='good', name='CensorGood', component='/censor/good/index', meta=RouteMeta(title='货物审核')), 
@@ -46,16 +46,16 @@ def get_menu_list():
     router_list.append(RouteItem(path='/payment', name='payment', component='LAYOUT', meta=RouteMeta(title='支付管理', icon='money-circle'),
                                  children=[RouteItem(path='wallet', name='PaymentWallet', component='/payment/wallet/index', meta=RouteMeta(title='钱包管理')),
                                            RouteItem(path='order', name='PaymentOrder', component='/payment/order/index', meta=RouteMeta(title='订单管理')),
-                                           RouteItem(path='system', name='PaymentSystem', component='/payment/system/index', meta=RouteMeta(title='系统管理'))
+                                        #    RouteItem(path='system', name='PaymentSystem', component='/payment/system/index', meta=RouteMeta(title='系统管理'))
                                            ]))
     
     # router_list.append(RouteItem(path='/test', name='test', component='LAYOUT', meta=RouteMeta(title='测试页面', icon='money-circle'),
     #                              children=[RouteItem(path='test', name='Test', component='/test/index', meta=RouteMeta(title='测试页面'))
     #                                        ]))
     
-    router_list.append(RouteItem(path='/chatTest', name='chat', component='LAYOUT', meta=RouteMeta(title='聊天管理', icon='chat'),
-                                 children=[RouteItem(path='chat', name='Chat', component='/chatTest/index', meta=RouteMeta(title='聊天测试页面')),
-                                           RouteItem(path='manager', name='ChatManager', component='/chatTest/manager/index', meta=RouteMeta(title='聊天管理页面'))
+    router_list.append(RouteItem(path='/chatting', name='chatting', component='LAYOUT', meta=RouteMeta(title='聊天管理', icon='chat'),
+                                 children=[RouteItem(path='demo', name='ChattingDemo', component='/chatting/demo/index', meta=RouteMeta(title='聊天测试页面')),
+                                        #    RouteItem(path='manager', name='ChatManager', component='/chatTest/manager/index', meta=RouteMeta(title='聊天管理页面'))
                                            ]))
     # router_list.append(RouteItem(path='/list', name='list', component='LAYOUT', redirect='/list/base', meta=RouteMeta(title='test pages', icon='view-list'), 
     #                                 children=[RouteItem(path='base', name='ListBase', component='/list/base/index', meta=RouteMeta(title='基础列表页')), 
@@ -71,7 +71,10 @@ def get_menu_list():
     if user_info.level == 'superuser':
         router_list.append(RouteItem(path='/setting', name='setting', component='LAYOUT', meta=RouteMeta(title='系统设置', icon='setting'),
                                     children=[RouteItem(path='admin', name='SettingAdmin', component='/setting/admin/index', meta=RouteMeta(title='管理员设置')),
-                                            RouteItem(path='log', name='SettingLog', component='setting/log/index', meta=RouteMeta(title='日志管理'))]))
+                                              RouteItem(path='admin/edit', name='AdminEdit', component='/setting/admin/editForm/index', meta=RouteMeta(title='编辑管理员信息', hidden=True)),
+                                              RouteItem(path='admin/create', name='AdminCreate', component='/setting/admin/createForm/index', meta=RouteMeta(title='创建管理员', hidden=True)),
+                                            # RouteItem(path='log', name='SettingLog', component='setting/log/index', meta=RouteMeta(title='日志管理'))
+                                            ]))
 
     # return json.loads(router_json)
     return BaseResponse(data={'list':  [json.loads(jsonpickle.encode(i, unpicklable=False)) for i in router_list]}).dict()
@@ -105,13 +108,13 @@ def get_dashboard_info():
     # issue_count = Issue.query.count()
     # sys_start_time = start_time
     
-    # url = "http://172.19.0.100:5000/dev/clients"
-    # # user_online = 0
-    # try:
-    #     response = requests.request("GET", url)
-    #     user_online = response.json()['data']['count']
-    # except:
-    user_online = -1
+    url = "http://192.168.1.250:5000/dev/clients"
+    # user_online = 0
+    try:
+        response = requests.request("GET", url)
+        user_online = response.json()['data']['count']
+    except:
+        user_online = -1
     
     print(user_online)
     

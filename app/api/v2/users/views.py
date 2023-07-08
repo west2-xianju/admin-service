@@ -18,48 +18,64 @@ userApi = Api(users)
 class Users(Resource):
     method_decorators = [jwt_required()]
     def get(self, user_id):
+        # Find the user info from the database
         user_info = User.query.filter_by(user_id=user_id).first()
 
+        # If the user isn't found, return a 404 error
         if not user_info:
             return BaseResponse(code=404, message='user not found').dict()
 
+        # Return the user info as a JSON object
         return BaseResponse(data=user_info.to_dict()).dict()
 
     
     def put(self, user_id):
+        # Make sure that the request has the correct content type
         if 'application/json' not in request.content_type:
             return BaseResponse(code=400, message='content type must be application/json').dict()
 
+        # Make sure that the user exists
         if not User.query.filter_by(user_id=user_id).first():
             return BaseResponse(code=404, message='user not found').dict()
 
+        # Make sure that the request data is not empty
         if not request.data:
             return BaseResponse(code=400, message='request data is empty').dict()
 
+        # Parse the request data into a dictionary
         data = json.loads(request.data)
         updateData = UpdateUserForm(**data)
         
+        # Get the user object from the database
         userObject = User.query.filter_by(user_id=user_id).first()
         
+        # If the request data includes a password, then set the user object's password to the new value
         if data.get('password'):
             userObject.password = data['password']
 
+        # Update the user in the database
         User.query.filter_by(user_id=user_id).update(dict(updateData))
 
+        # Return the updated user
         return BaseResponse(data=User.query.filter_by(user_id=user_id).first().to_dict()).dict()
     
     def patch(self, user_id):
+        # check if user_id is provided
         if not user_id:
             return BaseResponse(code=400, message='user_id is required').dict()
+        # check if user_id exists
         if not User.query.filter_by(user_id=user_id).first():
             return BaseResponse(code=404, message='user not found').dict()
         
+        # check if blocked is provided
         if request.json.get('blocked') not in [True, False]:
             return BaseResponse(code=400, message='blocked must be true or false').dict()
         
+        # update blocked
         User.query.filter_by(user_id=user_id).update({'blocked': request.json.get('blocked')})
         
         if request.json.get('blocked') == True:
+            # check if goods exist
             goods_list = Good.query.filter_by(seller_id=user_id, state='released').all()
             for _ in goods_list:
                  _.state = 'locked'
